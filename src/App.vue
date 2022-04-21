@@ -24,7 +24,7 @@
       >
     </el-sub-menu>
   </el-menu>
-  <router-view name="index"/>
+  <router-view name="index" />
 </template>
 
 <script lang="ts" setup>
@@ -37,7 +37,6 @@ const handleSelect = (key: string, keyPath: string[]) => {
 let menuList = reactive([
   { name: "社团活动", path: "/activity/index" },
   { name: "社团介绍", path: "/introduce/index" },
-  { name: "社团新闻", path: "/news/index" },
   { name: "社团招新", path: "/recruit/index" },
   { name: "关于", path: "/about/index" },
 ]);
@@ -60,5 +59,4 @@ const subMenu = reactive([
   position: absolute;
   right: 0;
 }
-
 </style>
