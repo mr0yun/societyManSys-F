@@ -9,7 +9,7 @@
           placeholder="用户名"
         >
           <template #prepend>
-            <el-button :icon="User" />
+            <el-button :icon="User" size="large"/>
           </template>
         </el-input>
       </el-form-item>
@@ -22,7 +22,7 @@
           placeholder="密码"
         >
           <template #prepend>
-            <el-button :icon="Lock" />
+            <el-button :icon="Lock" size="large"/>
           </template>
         </el-input>
       </el-form-item>

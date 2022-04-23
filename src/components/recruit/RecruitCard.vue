@@ -23,6 +23,8 @@
   border: 1px solid rgb(230, 230, 230);
   border-radius: 10px;
   margin-top: 20px;
+  transform: translateX(0px);
+  transition: all 1s;
 
   .card-top{
     height: 75px;
@@ -73,7 +75,7 @@
 
 .card-wrapper:hover{
   box-shadow: 0px 0px 8px rgb(230, 230, 230) ;
-  transform: translateX(200px);
+  transform: translateX(100px);
   transition: all 1s;
 }
 </style>
