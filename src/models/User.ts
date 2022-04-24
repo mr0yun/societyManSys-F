@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
   id: number;
   user_name: string;  // 必需
   password: string;  // 必需
