@@ -14,17 +14,17 @@
 <script lang="ts" setup>
 import LoginForm from "@/components/login/LoginForm.vue"
 import RegisterForm from "@/components/login/RegisterForm.vue"
-import { computed } from "vue";
-import { useStore } from "vuex";
-import { key } from "@/store";
-const store = useStore(key);
+// import { computed } from "vue";
+// import { useStore } from "vuex";
+// import { key } from "@/store";
+// const store = useStore(key);
 
-const login = computed(() => store.state.user.isLogin);
-setTimeout(() => {
-  store.commit("user/setIsLogin", true);
-}, 2000);
+// const login = computed(() => store.state.user.isLogin);
+// setTimeout(() => {
+//   store.commit("user/setIsLogin", true);
+// }, 2000);
 
-console.log(login.value);
+// console.log(login.value);
 </script>
 
 <style lang="less">

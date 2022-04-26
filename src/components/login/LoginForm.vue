@@ -9,7 +9,7 @@
           placeholder="用户名"
         >
           <template #prepend>
-            <el-button :icon="User" size="large"/>
+            <el-button :icon="User" size="large" />
           </template>
         </el-input>
       </el-form-item>
@@ -22,7 +22,7 @@
           placeholder="密码"
         >
           <template #prepend>
-            <el-button :icon="Lock" size="large"/>
+            <el-button :icon="Lock" size="large" />
           </template>
         </el-input>
       </el-form-item>
@@ -56,6 +56,16 @@
 <script lang="ts" setup>
 import { User, Lock } from "@element-plus/icons-vue";
 import { reactive } from "vue";
+import { login } from "@/api/user";
+import { ElMessage } from "element-plus";
+import { setToken } from "@/utils/token";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { key } from "@/store";
+const store = useStore(key);
+
+const router = useRouter();
+
 const form = reactive({
   username: "",
   password: "",
@@ -64,9 +74,25 @@ const form = reactive({
 const onSubmit = () => {
   console.log("submit!");
   form.loading = true;
-  setTimeout(() => {
+  login(form.username, form.password).then((res: any) => {
     form.loading = false;
-  }, 1000);
+    console.log(res);
+    if (res.code) {
+      // 存储TOKEN到COOKIE中
+      const data = JSON.parse(res.data);
+      console.log(data);
+      setToken(data.token);
+
+      // 存储用户信息到vuex
+      console.log(store.state.userLogin);
+      store.commit("setUserInfo", data);
+      store.commit("setUserLogin", true);
+      console.log(store.state.userLogin, store.state.userInfo);
+
+      // 跳转到活动页
+      router.push({ path: "/activity/index" });
+    }
+  });
 };
 const onCancel = () => {
   form.username = "";

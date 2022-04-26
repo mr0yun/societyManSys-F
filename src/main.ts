@@ -7,8 +7,12 @@ import { store, key } from "./store";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 
+// 引入axios
+import { axiosPlugin } from './plugins/axios';
+
 createApp(App)
   .use(store, key)
   .use(router)
   .use(ElementPlus, { size: "small", zIndex: 3000 })
+  .use(axiosPlugin)
   .mount("#app");

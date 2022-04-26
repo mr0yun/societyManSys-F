@@ -153,11 +153,6 @@ const rules = reactive({
     height: 100%;
     margin-left: 15%;
   }
-  .cell-item {
-    // width: 100px;
-    // display: flex;
-    // align-items: center;
-  }
 }
 .w-50 {
   width: 25vw;

@@ -66,15 +66,18 @@
 </template>
 
 <script lang="ts" setup>
+/* eslint-disable */
 import { ElMessage } from "element-plus";
 import { ref, reactive } from "vue";
+import { User } from "@/models/User";
+import { register } from "@/api/user";
 
 const form = reactive({
   username: "",
   password: "",
   confirm: "",
   realname: "",
-  sex: "",
+  sex: "男",
   stuid: "",
   loading: false,
 });
@@ -103,6 +106,25 @@ const submitForm = async (formEl: any) => {
     if (valid) {
       if (form.password === form.confirm) {
         // 提交表单
+        let user = new User(
+          form.username,
+          form.password,
+          form.realname,
+          form.sex,
+          form.stuid
+        );
+        user.power = 2;
+        console.log(JSON.stringify(user));
+        register(JSON.stringify(user)).then((res: any) => {
+          if (res.code) {
+            form.username = "";
+            form.password = "";
+            form.confirm = "";
+            form.realname = "";
+            form.sex = "男";
+            form.stuid = "";
+          }
+        });
       } else {
         ElMessage({
           type: "error",

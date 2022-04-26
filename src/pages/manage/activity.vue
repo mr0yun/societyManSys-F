@@ -4,18 +4,14 @@
       <el-table-column type="index" />
       <el-table-column label="活动名称" prop="name" />
       <el-table-column label="社团" prop="founder" />
-      <el-table-column
-        label="活动内容"
-        type="expand"
-        width="100"
-      >
+      <el-table-column label="活动内容" type="expand" width="100">
         <template #default="props">
           <p>{{ props.row.introduction }}</p>
         </template>
       </el-table-column>
       <el-table-column label="开始时间" prop="founding_date" />
       <el-table-column label="结束时间" prop="founding_date" />
-      <el-table-column label="状态" prop="recruit_eligible" >
+      <el-table-column label="状态" prop="recruit_eligible">
         <template #default="scope">
           <el-tag
             size="default"
@@ -62,11 +58,122 @@
       size="large"
       >添加记录</el-button
     >
+
+    <el-dialog v-model="dialogFormEditVisible" title="修改信息">
+      <div class="form-container">
+        <el-form :model="editForm" label-width="auto">
+          <el-form-item label="活动名称" size="default">
+            <el-input class="w-50" size="default" v-model="editForm.name">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="活动内容" size="default">
+            <el-input
+              class="w-50"
+              size="default"
+              :rows="6"
+              type="textarea"
+              v-model="editForm.content"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item label="活动地点" size="default">
+            <el-input class="w-50" size="default" v-model="editForm.place">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="活动状态" size="default">
+            <el-input class="w-50" size="default" v-model="editForm.state">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="开始时间" size="default">
+            <el-input
+              class="w-50"
+              size="default"
+              v-model="editForm.start_time"
+              placeholder="YYYY-MM-DD HH:mm:ss"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item label="结束时间" size="default">
+            <el-input
+              class="w-50"
+              size="default"
+              v-model="editForm.end_time"
+              placeholder="YYYY-MM-DD HH:mm:ss"
+            >
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogFormEditVisible = false" size="default"
+            >取消</el-button
+          >
+          <el-button type="primary" size="default" @click="modify"
+            >确认</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="dialogFormAddVisible" title="添加信息">
+      <div class="form-container">
+        <el-form :model="editForm" label-width="auto">
+          <el-form-item label="活动名称" size="default">
+            <el-input class="w-50" size="default" v-model="editForm.name">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="活动内容" size="default">
+            <el-input
+              class="w-50"
+              size="default"
+              :rows="6"
+              type="textarea"
+              v-model="editForm.content"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item label="活动地点" size="default">
+            <el-input class="w-50" size="default" v-model="editForm.place">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="开始时间" size="default">
+            <el-input
+              class="w-50"
+              size="default"
+              v-model="editForm.start_time"
+              placeholder="YYYY-MM-DD HH:mm:ss"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item label="结束时间" size="default">
+            <el-input
+              class="w-50"
+              size="default"
+              v-model="editForm.end_time"
+              placeholder="YYYY-MM-DD HH:mm:ss"
+            >
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogFormAddVisible = false" size="default"
+            >取消</el-button
+          >
+          <el-button type="primary" size="default" @click="add"
+            >确认</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref } from "vue";
 import { ISociety, Society } from "@/models/Society";
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const search = ref("");
 const filterTableData = computed(() =>
@@ -80,12 +187,42 @@ const filterTableData = computed(() =>
 );
 const handleEdit = (index: number, row: ISociety) => {
   console.log(index, row);
+  dialogFormEditVisible.value = true;
+  editIndex.value = index;
 };
 const handleDelete = (index: number, row: ISociety) => {
   console.log(index, row);
+  ElMessageBox.confirm(
+    '确认删除该条数据?',
+    '警告',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      societyInfo.splice(index, 1);
+      ElMessage({
+        type: 'success',
+        message: '删除成功',
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '取消删除',
+      })
+    })
+  
 };
 
-const societyInfo: ISociety[] = [
+// 表单验证
+// const validatePass = (rule: any, value: any, callback: any) => {
+//   if(value)
+// }
+
+const societyInfo: ISociety[] = reactive([
   {
     id: 3,
     name: "武术社",
@@ -138,11 +275,50 @@ const societyInfo: ISociety[] = [
     ratify: 0,
     recruit_eligible: 0,
   },
-];
+]);
 
-const onAddItem = () => {
-  // tableData.value.push();
+// 编辑数据
+const dialogFormEditVisible = ref(false);
+const editIndex = ref(0);
+const editForm = reactive({
+  name: "",
+  content: "",
+  place: "",
+  start_time: "",
+  end_time: "",
+  state: "",
+});
+
+const modify = () => {
+  dialogFormEditVisible.value = false;
 };
+
+// 添加数据
+const dialogFormAddVisible = ref(false);
+const addForm = reactive({
+  name: "",
+  content: "",
+  place: "",
+  start_time: "",
+  end_time: "",
+  state: "",
+});
+const add = () => {
+  // tableData.value.push();
+  dialogFormAddVisible.value = false;
+};
+const onAddItem = () =>{
+  dialogFormAddVisible.value = true;
+}
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.w-50 {
+  width: 25vw;
+}
+.form-container {
+  width: 100%;
+  height: 100%;
+  margin-left: 15%;
+}
+</style>

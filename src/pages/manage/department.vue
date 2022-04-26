@@ -38,12 +38,45 @@
       @click="onAddItem"
       size="large"
       >添加部门</el-button
-    >
+    ><el-dialog v-model="dialogFormEditVisible" title="修改信息">
+      <div class="form-container">
+        <el-form :model="editForm" label-width="auto">
+          <el-form-item label="部长" size="default" prop="president">
+            <el-input class="w-50" size="default" v-model="editForm.minister">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="部门介绍" size="default" prop="introduction">
+            <el-input
+              class="w-50"
+              size="default"
+              :rows="6"
+              type="textarea"
+              v-model="editForm.introduction"
+            >
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogFormEditVisible = false" size="default"
+            >取消</el-button
+          >
+          <el-button
+            type="primary"
+            size="default"
+            @click="dialogFormEditVisible = false"
+            >确认</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, reactive } from "vue";
 import { ISociety, Society } from "@/models/Society";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const search = ref("");
 const filterTableData = computed(() =>
@@ -56,11 +89,38 @@ const filterTableData = computed(() =>
   )
 );
 const handleEdit = (index: number, row: ISociety) => {
+  dialogFormEditVisible.value = true;
   console.log(index, row);
 };
 const handleDelete = (index: number, row: ISociety) => {
   console.log(index, row);
+  ElMessageBox.confirm("确认删除该条数据?", "警告", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      societyInfo.splice(index, 1);
+      ElMessage({
+        type: "success",
+        message: "删除成功",
+      });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "取消删除",
+      });
+    });
 };
+
+
+// 编辑数据
+const editForm = reactive({
+  minister: "",
+  introduction: "",
+})
+const dialogFormEditVisible = ref(false);
 
 const societyInfo: ISociety[] = [
   {
@@ -122,4 +182,13 @@ const onAddItem = () => {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.w-50 {
+  width: 25vw;
+}
+.form-container {
+    width: 100%;
+    height: 100%;
+    margin-left: 15%;
+  }
+</style>
