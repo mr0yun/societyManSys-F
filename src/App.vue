@@ -34,11 +34,15 @@
 import { ref, reactive, computed } from "vue";
 import { useStore } from "vuex";
 import { key } from "@/store";
-
 import { removeToken } from "./utils/token";
 
-const store = useStore(key);
+// 引入api
+import { getActivityAll } from "./api/activity";
+import { getNewsAll } from "./api/news";
+import { getRecruitmentAll } from "./api/recruitment";
+import { getSocietyAll } from "./api/society";
 
+const store = useStore(key);
 
 const userLogin = computed(() => store.state.userLogin);
 const userPower = computed(() => store.state.userInfo.power);
@@ -70,6 +74,32 @@ const clickSubMenu = (path: string) => {
     console.log("退出登录");
   }
 }
+
+// 请求接口，存储到VUEX中
+getActivityAll().then((res: any) => {
+  if(res.code){
+    console.log(res.data);
+    store.commit("setActivityInfo", JSON.parse(res.data));
+  }
+});
+getSocietyAll().then((res: any) => {
+  if(res.code){
+    console.log(res.data);
+    store.commit("setSocietyInfo", JSON.parse(res.data));
+  }
+});
+getNewsAll().then((res: any) => {
+  if(res.code){
+    console.log(res.data);
+    store.commit("setNewsInfo", JSON.parse(res.data));
+  }
+});
+getRecruitmentAll().then((res: any) => {
+  if(res.code){
+    console.log(res.data);
+    store.commit("setRecruitmentInfo", JSON.parse(res.data));
+  }
+});
 </script>
 
 <style scoped lang="less">

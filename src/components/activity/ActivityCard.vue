@@ -2,28 +2,28 @@
   <el-card class="box-card">
     <div class="card-head">
       <el-row>
-        <el-col :span="8">五子棋社</el-col>
+        <el-col :span="8">{{item.sname}}</el-col>
         <el-col :span="8">
           <el-icon><Calendar /></el-icon>
-          <span style="margin-left: 4px">2022/04/17 - 2022/04/27</span>
+          <span style="margin-left: 4px">{{formatDateTime(item.start_time)}} - {{formatDateTime(item.end_time)}}</span>
         </el-col>
         <el-col :span="2" :offset="6">
-          <el-button type="primary" round>了解详情</el-button>
+          <el-button type="primary" round>我要参加</el-button>
         </el-col>
       </el-row>
     </div>
-    <div class="card-title">院内五子棋比赛开始啦</div>
+    <div class="card-title">{{item.name}}</div>
     <div class="card-summary">
-      在4月份我们将迎来软院第一场五子棋对抗赛，报名流程简便，奖励丰厚，更有众多同学朋友与你切磋！
+      {{item.content}}
     </div>
     <el-row class="card-info">
       <el-col :span="4" :offset="16">
         <el-icon><Location /></el-icon>
-        <span style="margin-left: 4px">软件楼301</span>
+        <span style="margin-left: 4px">{{item.place}}</span>
       </el-col>
       <el-col :span="4">
         <el-icon><Avatar /></el-icon>
-        <span style="margin-left: 4px;">已有40人报名参加</span>
+        <span style="margin-left: 4px;">已有{{item.num}}人报名参加</span>
       </el-col>
     </el-row>
   </el-card>
@@ -35,6 +35,15 @@ import {
   Location,
   Avatar,
 } from "@element-plus/icons-vue";
+import { defineProps } from "vue";
+import { formatDateTime } from "@/utils/format";
+
+const props = defineProps({
+  item: {
+    type: Object,
+    required: true,
+  }
+});
 </script>
 
 <style lang="less" scoped>

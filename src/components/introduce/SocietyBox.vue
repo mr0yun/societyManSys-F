@@ -1,31 +1,31 @@
 <template>
   <div class="society-box">
-    <div v-if="props.odd">
+    <div v-if="odd">
         <el-col :span="18">
           <div class="society-introduction">
-            本社团以弘扬民族武术艺术为宗旨，以提高社员的武术技巧，促进校园文化建设为目标。了解武术基本知识，提高社员武术水平。培养学生爱好武术的兴趣，初步感受武术的艺术美
+            {{item.introduction}}
           </div>
         </el-col>
 
         <el-col :span="6" :offset="2">
           <div class="society-title">
-            <div class="society-name">舞蹈社</div>
+            <div class="society-name">{{item.name}}</div>
             <div class="devider"></div>
-            <span class="society-type">文艺爱好</span>
+            <span class="society-type">{{item.classification}}</span>
           </div>
         </el-col>
     </div>
     <div v-else>
       <el-col :span="6">
         <div class="society-title">
-          <div class="society-name">舞蹈社</div>
+          <div class="society-name">{{item.name}}</div>
           <div class="devider"></div>
-          <span class="society-type">文艺爱好</span>
+          <span class="society-type">{{item.classification}}</span>
         </div>
       </el-col>
       <el-col :span="18" :offset="2">
         <div class="society-introduction">
-          本社团以弘扬民族武术艺术为宗旨，以提高社员的武术技巧，促进校园文化建设为目标。了解武术基本知识，提高社员武术水平。培养学生爱好武术的兴趣，初步感受武术的艺术美
+          {{item.introduction}}
         </div>
       </el-col>
     </div>
@@ -35,6 +35,7 @@
 <script lang="ts" setup>
 const props = defineProps<{
   odd: boolean;
+  item: any;
 }>();
 </script>
 

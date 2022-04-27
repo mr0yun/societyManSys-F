@@ -113,7 +113,7 @@ const submitForm = async (formEl: any) => {
           form.sex,
           form.stuid
         );
-        user.power = 2;
+        // user.power = 2;
         console.log(JSON.stringify(user));
         register(JSON.stringify(user)).then((res: any) => {
           if (res.code) {

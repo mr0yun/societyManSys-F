@@ -7,7 +7,7 @@
       </el-carousel-item>
     </el-carousel>
     <div class="card-wrapper">
-      <ActivityCard v-for="i in 3" :key="i" />
+      <ActivityCard v-for="(e, i) in activityInfo" :key="i" :item="e"/>
     </div>
     <div class="center-box">
       <el-pagination background layout="prev, pager, next, jumper" :total="1000" />
@@ -16,6 +16,14 @@
 </template>
 <script lang="ts" setup>
 import ActivityCard from '@/components/activity/ActivityCard.vue'
+import { useStore } from "vuex";
+import { key } from "@/store";
+import { computed } from "vue"
+
+const store = useStore(key);
+
+const activityInfo = computed(() => store.state.activityInfo);
+
 </script>
 <style lang="less" scoped>
 #activity-page {

@@ -13,6 +13,7 @@
             size="large"
             v-model="form.username"
             placeholder="用户名"
+            disabled
           >
             <template #prepend>
               <el-button :icon="User" size="large" />
@@ -25,7 +26,7 @@
             size="large"
             v-model="form.password"
             type="password"
-            placeholder="密码"
+            placeholder="旧密码"
           >
             <template #prepend>
               <el-button :icon="Lock" size="large" />
@@ -38,7 +39,7 @@
             size="large"
             v-model="form.twicePsd"
             type="password"
-            placeholder="确认密码"
+            placeholder="新密码"
           >
             <template #prepend>
               <el-button :icon="Lock" size="large" />
@@ -75,9 +76,19 @@
 <script lang="ts" setup>
 import { User, Lock } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
+import { useStore } from "vuex";
+import { key } from "@/store";
+import { modifyPsd } from "@/api/user";
+import { useRouter } from "vue-router";
+
+const store = useStore(key);
+const userName = computed(() => store.state.userInfo.user_name);
+
+const router = useRouter();
+
 const form = reactive({
-  username: "",
+  username: userName.value,
   password: "",
   twicePsd: "",
   loading: false,
@@ -85,19 +96,31 @@ const form = reactive({
 const onSubmit = () => {
   console.log("submit!");
   form.loading = true;
-  if (form.password !== form.twicePsd) {
+  if (form.password == form.twicePsd) {
     ElMessage({
       type: "error",
-      message: "两次密码输入不一致！",
+      message: "新密码没有任何修改！",
       showClose: true,
     });
   }
-  setTimeout(() => {
-    form.loading = false;
-  }, 1000);
+  else if(form.twicePsd.length < 6){
+    ElMessage({
+      type: "error",
+      message: "新密码小于6位！",
+      showClose: true,
+    });
+  }
+  else{
+    modifyPsd(form.username, form.password, form.twicePsd).then((res: any) => {
+      if(res.code){
+        onCancel();
+        router.push("/userinfo/index");
+      }
+    })
+  }
+  form.loading = false;
 };
 const onCancel = () => {
-  form.username = "";
   form.password = "";
   form.twicePsd = "";
 };

@@ -1,19 +1,25 @@
 <template>
   <div class="card-wrapper">
     <div class="card-top">
-      <div class="card-title">围棋社 技术部</div>
-      <div class="card-time">招<span style="color: #409EFF"> 6 </span>人</div>
-      <div class="card-time">2022-04-21 20:37发布</div>
-      <el-button type="primary" plain size="default">我要参加</el-button>
+      <div class="card-title">{{item.sname + " " + item.dname}}</div>
+      <div class="card-time">招<span style="color: #409EFF"> {{item.recruit_num}} </span>人</div>
+      <div class="card-time">{{formatDateTime(item.start_time)}}发布</div>
+      <el-button type="primary" plain size="default">我要报名</el-button>
     </div>
     <div class="card-bottom">
-      <div class="require">策划能力强，平时做事习惯做计划，考虑问题较全面，责任感强。策划能力强，平时做事习惯做计划，考虑问题较全面，责任感强。策划能力强，平时做事习惯做计划，考虑问题较全面，责任感强。策划能力强，平时做事习惯做计划，考虑问题较全面，责任感强。策划能力强，平时做事习惯做计划，考虑问题较全面，责任感强。策划能力强，平时做事习惯做计划，考虑问题较全面，责任感强。策划能力强，平时做事习惯做计划，考虑问题较全面，责任感强。策划能力强，平时做事习惯做计划，考虑问题较全面，责任感强。</div>
-      <div class="end-time">2022-04-25 20:37截止</div>
+      <div class="require">{{item.requirement}}</div>
+      <div class="end-time">{{formatDateTime(item.end_time)}}截止</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { formatDateTime } from '@/utils/format';
+import { defineProps } from 'vue';
+
+const props = defineProps<{
+  item: any,
+}>()
 </script>
 
 <style lang="less" scoped>

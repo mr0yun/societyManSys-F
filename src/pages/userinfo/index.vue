@@ -21,7 +21,7 @@
             用户名
           </div>
         </template>
-        aaa
+        {{userInfo.user_name}}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" align="center">
         <template #label>
@@ -32,7 +32,7 @@
             真实姓名
           </div>
         </template>
-        周壹玟
+        {{userInfo.real_name}}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" align="center">
         <template #label>
@@ -43,7 +43,7 @@
             性别
           </div>
         </template>
-        女
+        {{userInfo.gender}}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" align="center">
         <template #label>
@@ -54,7 +54,7 @@
             专业
           </div>
         </template>
-        软件工程
+        {{userInfo.major ? userInfo.major : "暂无"}}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" align="center">
         <template #label>
@@ -65,7 +65,7 @@
             年级
           </div>
         </template>
-        2018
+        {{userInfo.grade ? userInfo.grade : "暂无"}}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" align="center">
         <template #label>
@@ -76,7 +76,7 @@
             班级
           </div>
         </template>
-        2
+        {{userInfo.class ? userInfo.class : "暂无"}}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" align="center">
         <template #label>
@@ -87,7 +87,7 @@
             学号
           </div>
         </template>
-        8003118329
+        {{userInfo.stu_id}}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" align="center">
         <template #label>
@@ -98,7 +98,7 @@
             手机号
           </div>
         </template>
-        18100000000
+        {{userInfo.phone ? userInfo.phone : "暂无"}}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" align="center">
         <template #label>
@@ -109,7 +109,7 @@
             邮箱
           </div>
         </template>
-        mr0yun@qq.com
+        {{userInfo.email ? userInfo.email : "暂无"}}
       </el-descriptions-item>
     </el-descriptions>
 
@@ -117,7 +117,7 @@
     <div class="form-container">
       <el-form :model="form" label-width="auto" :rules="rules" ref="ruleFormRef">
       <el-form-item label="用户名" size="default" prop="user_name">
-        <el-input class="w-50" size="default" v-model="form.user_name">
+        <el-input class="w-50" size="default" v-model="form.user_name" disabled>
         </el-input>
       </el-form-item>
       <el-form-item label="专业" size="default">
@@ -151,7 +151,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogFormVisible = false"  size="default">取消</el-button>
-          <el-button type="primary" size="default" @click="dialogFormVisible = false && modify()"
+          <el-button type="primary" size="default" @click="modify"
             >确认</el-button
           >
         </span>
@@ -172,22 +172,32 @@ import {
   Position,
   Briefcase,
 } from "@element-plus/icons-vue";
-import { reactive, ref } from 'vue'
+
+import { ref, reactive, computed } from "vue";
+import { useStore } from "vuex";
+import { key } from "@/store";
+import { modifyUser } from "@/api/user";
+
 let dialogFormVisible = ref(false);
-const formLabelWidth = '140px'
+
+const store = useStore(key);
+
+const userInfo = computed(() => store.state.userInfo);
 
 const form = reactive({
-  user_name: '',
-  major: '',
-  grade: '',
-  class: '',
-  email: '',
-  phone: '',
+  ...userInfo.value
 })
 
 const modify = () => {
-  console.log("modify");
+  console.log(form, JSON.stringify(form));
   
+  modifyUser(JSON.stringify(form)).then((res: any) => {
+    if(res.code){
+      // 更新VUEX
+      store.commit("setUserInfo", form);
+      dialogFormVisible.value = false;
+    }
+  })
 };
 
 const rules = reactive({

@@ -8,8 +8,8 @@
               <span>社团介绍</span>
             </div>
           </template>
-          <el-row v-for="i in 6" :key="i">
-            <SocietyBox :odd="i % 2 == 0" />
+          <el-row v-for="(e, i) in societyInfo" :key="i">
+            <SocietyBox :odd="i % 2 == 0" :item="e" />
             <el-divider/>
           </el-row>
         </el-card>
@@ -25,18 +25,21 @@
             <div>
               <el-collapse v-model="activeName" accordion>
                 <el-collapse-item
-                  title="关于本周末暂停服务的公告"
+                  :title="e.theme"
                   :name="i"
-                  v-for="i in 6"
-                  :key="i"
-                >
-                  <div>本周六10：00-22：00暂停服务，升级服务器，敬请理解。</div>
+                  v-for="(e, i) in newsInfo"
+                  :key="i">
+                  <template #title>
+                    {{e.theme}}
+                    <el-tag effect="light" round style="margin-left: 10px">{{e.name}}</el-tag>
+                  </template>
+                  <div>{{e.content}}</div>
                   <el-row>
                     <el-col :span="4" :offset="10" class="news-text"
-                      >管理员</el-col
+                      >{{e.contributor}}</el-col
                     >
                     <el-col :span="8" :offset="2" class="news-text"
-                      >2022-04-20 21:34</el-col
+                      >{{formatDateTime(e.published_time)}}</el-col
                     >
                   </el-row>
                 </el-collapse-item>
@@ -50,9 +53,24 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, reactive, computed } from "vue";
+import { useStore } from "vuex";
+import { key } from "@/store";
+
 import SocietyBox from "@/components/introduce/SocietyBox.vue";
-const activeName = ref("1");
+import { formatDateTime } from "@/utils/format";
+
+const store = useStore(key);
+const activeName = ref("0");
+
+const societyInfo = computed(()=>{
+  return store.state.societyInfo;
+})
+const newsInfo = computed(() => {
+  return store.state.newsInfo;
+})
+
+
 </script>
 
 <style lang="less">
